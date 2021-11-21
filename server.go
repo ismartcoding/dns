@@ -57,6 +57,8 @@ type ResponseWriter interface {
 	// Hijack lets the caller take over the connection.
 	// After a call to Hijack(), the DNS package will not do anything with the connection.
 	Hijack()
+
+	SessionUDP() *SessionUDP
 }
 
 // A ConnectionStater interface is used by a DNS Handler to access TLS connection state
@@ -772,6 +774,10 @@ func (w *response) LocalAddr() net.Addr {
 	default:
 		panic("dns: internal error: udp and tcp both nil")
 	}
+}
+
+func (w *response) SessionUDP() *SessionUDP {
+	return w.udpSession
 }
 
 // RemoteAddr implements the ResponseWriter.RemoteAddr method.

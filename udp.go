@@ -1,3 +1,4 @@
+//go:build !windows
 // +build !windows
 
 package dns
@@ -34,6 +35,8 @@ type SessionUDP struct {
 
 // RemoteAddr returns the remote network address.
 func (s *SessionUDP) RemoteAddr() net.Addr { return s.raddr }
+
+func (s *SessionUDP) Context() []byte { return s.context }
 
 // ReadFromSessionUDP acts just like net.UDPConn.ReadFrom(), but returns a session object instead of a
 // net.UDPAddr.
