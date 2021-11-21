@@ -16,8 +16,8 @@ var udpOOBSize = func() int {
 	// IPv6 control message ahead of time. To get around this, we size
 	// the buffer equal to the largest of the two.
 
-	oob4 := ipv4.NewControlMessage(ipv4.FlagDst | ipv4.FlagInterface)
-	oob6 := ipv6.NewControlMessage(ipv6.FlagDst | ipv6.FlagInterface)
+	oob4 := ipv4.NewControlMessage(ipv4.FlagDst | ipv4.FlagSrc | ipv4.FlagInterface)
+	oob6 := ipv6.NewControlMessage(ipv6.FlagDst | ipv6.FlagSrc | ipv6.FlagInterface)
 
 	if len(oob4) > len(oob6) {
 		return len(oob4)
@@ -59,8 +59,8 @@ func WriteToSessionUDP(conn *net.UDPConn, b []byte, session *SessionUDP) (int, e
 func setUDPSocketOptions(conn *net.UDPConn) error {
 	// Try setting the flags for both families and ignore the errors unless they
 	// both error.
-	err6 := ipv6.NewPacketConn(conn).SetControlMessage(ipv6.FlagDst|ipv6.FlagInterface, true)
-	err4 := ipv4.NewPacketConn(conn).SetControlMessage(ipv4.FlagDst|ipv4.FlagInterface, true)
+	err6 := ipv6.NewPacketConn(conn).SetControlMessage(ipv6.FlagDst|ipv6.FlagSrc|ipv6.FlagInterface, true)
+	err4 := ipv4.NewPacketConn(conn).SetControlMessage(ipv4.FlagDst|ipv4.FlagSrc|ipv4.FlagInterface, true)
 	if err6 != nil && err4 != nil {
 		return err4
 	}
